@@ -1,0 +1,11 @@
+{
+  "text.discord_notifier.settings.title": "Notification Settings",
+  "text.discord_notifier.settings.discord_username": "Discord Username",
+  "text.discord_notifier.settings.discord_username_prompt": "Enter your Discord username",
+  "text.discord_notifier.settings.purchase_notifications": "Purchase Notifications",
+  "text.discord_notifier.settings.out_of_stock_notification": "Out of Stock Notifications",
+  "text.discord_notifier.settings.warp_plate_notifications": "Warp Plate Expiry Notifications",
+  "text.discord_notifier.settings.on": "On",
+  "text.discord_notifier.settings.off": "Off",
+  "text.discord_notifier.settings.save": "Save"
+}

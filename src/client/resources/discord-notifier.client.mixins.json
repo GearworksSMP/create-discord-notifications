@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.gearworks.notifier.mixin.client",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "com.gearworks.notifier.mixin.MixinPlugin",
+  "client": [
+    "numismatics.VendorScreenMixin",
+    "rentaplate.WarpPlateRentScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}

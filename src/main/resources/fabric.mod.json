@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "discord-notifier",
+  "version": "${version}",
+  "name": "Discord Notifier",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "Me!"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/discord-notifier/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.gearworks.notifier.DiscordNotifier"
+    ],
+    "client": [
+      "com.gearworks.notifier.DiscordNotifierClient"
+    ]
+  },
+  "mixins": [
+    "discord-notifier.mixins.json",
+    {
+      "config": "discord-notifier.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "minecraft": "~1.20.1"
+  },
+  "suggests": {
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "com.gearworks.notifier.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "com.gearworks.notifier.mixin.MixinPlugin",
+  "mixins": [
+    "numismatics.VendorBlockEntityAccessor",
+    "numismatics.VendorBlockEntityMixin",
+    "rentaplate.WarpPlatePairMixin",
+    "rentaplate.WarpPlatesSavedDataAccessor",
+    "rentaplate.WarpPlatesSavedDataMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
