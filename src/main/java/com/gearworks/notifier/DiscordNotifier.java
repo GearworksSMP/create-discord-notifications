@@ -2,8 +2,10 @@ package com.gearworks.notifier;
 
 import com.gearworks.notifier.data.NotificationSettings;
 import com.gearworks.notifier.data.NotifierSavedData;
+import com.gearworks.notifier.notifiers.NumismaticsNotifier;
 import com.gearworks.notifier.notifiers.WarpPlateNotifier;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -34,7 +36,12 @@ public class DiscordNotifier implements ModInitializer {
 		});
 
 		if (FabricLoader.getInstance().isModLoaded("rentaplate")) {
-			ServerTickEvents.END_WORLD_TICK.register(new WarpPlateNotifier());
+			ServerTickEvents.END_WORLD_TICK.register(WarpPlateNotifier.INSTANCE);
+		}
+		
+		if (FabricLoader.getInstance().isModLoaded("numismatics")) {
+			ServerTickEvents.END_WORLD_TICK.register(NumismaticsNotifier.INSTANCE);
+			ServerLifecycleEvents.SERVER_STOPPING.register(NumismaticsNotifier.INSTANCE);
 		}
 	}
 }

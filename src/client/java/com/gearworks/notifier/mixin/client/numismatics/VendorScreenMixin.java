@@ -22,6 +22,6 @@ public abstract class VendorScreenMixin extends AbstractContainerScreen<Abstract
 			at = @At("TAIL")
 	)
 	private void notifier$addNotificationButton(CallbackInfo ci) {
-		this.addRenderableWidget(new NotificationButton(this.width - 25, 5));
+		this.addRenderableWidget(new NotificationButton(this.leftPos + this.imageWidth - 6, this.topPos));
 	}
 }

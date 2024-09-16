@@ -22,6 +22,6 @@ public abstract class WarpPlateRentScreenMixin extends AbstractContainerScreen<A
 			at = @At("TAIL")
 	)
 	private void notifier$addNotificationButton(CallbackInfo ci) {
-		this.addRenderableWidget(new NotificationButton(this.width - 25, 5));
+		this.addRenderableWidget(new NotificationButton(this.leftPos + this.imageWidth - 20, this.topPos - 24));
 	}
 }
