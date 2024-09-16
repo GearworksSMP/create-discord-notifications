@@ -11,7 +11,7 @@ import java.util.Properties;
 public class NotifierConfig {
 	public static final NotifierConfig INSTANCE = new NotifierConfig(FabricLoader.getInstance().getConfigDir().resolve("discord_notifier.properties").toFile());
 	private static final String SERVER_NAME = "server_display_name";
-	private static final String SERVER_ID = "server_id";
+	private static final String SERVER_ID = "discord_server_id";
 	private static final String ALLOW_PINGS = "allow_pings";
 	private static final String BOT_TOKEN = "bot_token";
 	private static final String NOTIFICATION_CHANNEL = "notification_channel";

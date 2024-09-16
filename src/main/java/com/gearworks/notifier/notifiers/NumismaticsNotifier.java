@@ -40,8 +40,6 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 	@Override
 	public void onEndTick(ServerLevel world) {
 		List<Tuple<PurchaseData, Integer>> toRemove = new ArrayList<>();
-		System.out.println("Checking purchase queue");
-		System.out.println(purchaseQueue);
 		
 		for (Tuple<PurchaseData, Integer> tuple : purchaseQueue) {
 			PurchaseData data = tuple.getA();
@@ -160,7 +158,7 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 			EmbedUtil.addLocation(builder, dimension, pos);
 			builder.addField("Item", sold.getCount() + " " +sold.getHoverName().getString(), EMBED_FIELDS_ARE_INLINE);
 			builder.addField("Cost", cost + " Cogs", EMBED_FIELDS_ARE_INLINE);
-			builder.addField("Purchaser", purchaserMcUsername, EMBED_FIELDS_ARE_INLINE);
+			builder.addField("Buyer", purchaserMcUsername, EMBED_FIELDS_ARE_INLINE);
 			builder.addField("Seller", sellerMcUsername, EMBED_FIELDS_ARE_INLINE);
 		}
 
