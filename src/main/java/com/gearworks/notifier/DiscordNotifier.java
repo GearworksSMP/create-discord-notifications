@@ -38,7 +38,7 @@ public class DiscordNotifier implements ModInitializer {
 		if (FabricLoader.getInstance().isModLoaded("rentaplate")) {
 			ServerTickEvents.END_WORLD_TICK.register(WarpPlateNotifier.INSTANCE);
 		}
-		
+
 		if (FabricLoader.getInstance().isModLoaded("numismatics")) {
 			ServerTickEvents.END_WORLD_TICK.register(NumismaticsNotifier.INSTANCE);
 			ServerLifecycleEvents.SERVER_STOPPING.register(NumismaticsNotifier.INSTANCE);

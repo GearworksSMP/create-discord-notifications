@@ -36,15 +36,15 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 
 	private NumismaticsNotifier() {
 	}
-	
+
 	@Override
 	public void onEndTick(ServerLevel world) {
 		List<Tuple<PurchaseData, Integer>> toRemove = new ArrayList<>();
-		
+
 		for (Tuple<PurchaseData, Integer> tuple : purchaseQueue) {
 			PurchaseData data = tuple.getA();
 			int ticksLeft = tuple.getB();
-			
+
 			if (ticksLeft <= 0) {
 				DiscordBot.INSTANCE.addMessage(data.toEvent());
 				toRemove.add(tuple);
@@ -52,7 +52,7 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 				tuple.setB(ticksLeft - 1);
 			}
 		}
-		
+
 		purchaseQueue.removeAll(toRemove);
 	}
 
@@ -71,7 +71,7 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 
 		NotificationSettings settings = NotifierSavedData.getSettings(level.getServer(), owner);
 		PurchaseData data = new PurchaseData(level.dimension(), pos, UsernameUtils.INSTANCE.getName(purchaser.getUUID()), UsernameUtils.INSTANCE.getName(owner), settings.discordUsername(), purchasedItem, price.getPrice(Coin.COG));
-		
+
 		for (Tuple<PurchaseData, Integer> tuple : purchaseQueue) {
 			if (tuple.getA().canMerge(data)) {
 				tuple.getA().merge(data);
@@ -79,7 +79,7 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 				return;
 			}
 		}
-		
+
 		purchaseQueue.add(new Tuple<>(data, 10 * 20));
 	}
 
@@ -111,7 +111,7 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 		private final Optional<String> sellerDiscordUsername;
 		private final ItemStack sold;
 		private int cost;
-		
+
 		public PurchaseData(ResourceKey<Level> dimension, BlockPos pos, String purchaserMcUsername, String sellerMcUsername, Optional<String> sellerDiscordUsername, ItemStack sold, int cost) {
 			this.dimension = dimension;
 			this.pos = pos;
@@ -121,16 +121,16 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 			this.sold = sold;
 			this.cost = cost;
 		}
-		
+
 		public boolean canMerge(PurchaseData other) {
 			return this.dimension.equals(other.dimension) && this.pos.equals(other.pos) && this.purchaserMcUsername.equals(other.purchaserMcUsername) && this.sellerMcUsername.equals(other.sellerMcUsername) && this.sold.is(other.sold.getItem());
 		}
-		
+
 		public void merge(PurchaseData other) {
 			this.sold.grow(other.sold.getCount());
 			this.cost += other.cost;
 		}
-		
+
 		public PurchaseMessageEvent toEvent() {
 			return new PurchaseMessageEvent(dimension, pos, sold, cost, purchaserMcUsername, sellerMcUsername, sellerDiscordUsername);
 		}
@@ -156,7 +156,7 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 			builder.setTitle("Purchase Notification");
 			builder.addField("Server", NotifierConfig.INSTANCE.getServerName(), EMBED_FIELDS_ARE_INLINE);
 			EmbedUtil.addLocation(builder, dimension, pos);
-			builder.addField("Item", sold.getCount() + " " +sold.getHoverName().getString(), EMBED_FIELDS_ARE_INLINE);
+			builder.addField("Item", sold.getCount() + " " + sold.getHoverName().getString(), EMBED_FIELDS_ARE_INLINE);
 			builder.addField("Cost", cost + " Cogs", EMBED_FIELDS_ARE_INLINE);
 			builder.addField("Buyer", purchaserMcUsername, EMBED_FIELDS_ARE_INLINE);
 			builder.addField("Seller", sellerMcUsername, EMBED_FIELDS_ARE_INLINE);

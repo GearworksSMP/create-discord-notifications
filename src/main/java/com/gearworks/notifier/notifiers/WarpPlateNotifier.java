@@ -22,10 +22,10 @@ import static com.gearworks.notifier.DiscordNotifier.EMBED_FIELDS_ARE_INLINE;
 
 public class WarpPlateNotifier implements ServerTickEvents.EndWorldTick {
 	public static final WarpPlateNotifier INSTANCE = new WarpPlateNotifier();
-	
+
 	private WarpPlateNotifier() {
 	}
-	
+
 	@Override
 	public void onEndTick(ServerLevel world) {
 		WarpPlatesSavedData data = WarpPlatesSavedData.get(world);

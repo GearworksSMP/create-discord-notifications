@@ -84,7 +84,7 @@ public class DiscordBot implements Runnable {
 					if (NotifierConfig.INSTANCE.allowPings() && mentionedUser.isPresent() && !mentionedUser.get().equals(NotifierConfig.INSTANCE.getServerId())) {
 						data.setContent(messageEvent.getMentionedUser().map((u) -> "<@" + u + ">").get());
 					}
-					
+
 					channel.sendMessage(data.build()).queue();
 				} else {
 					DiscordNotifier.LOGGER.error("Failed to find channel with ID {}", messageEvent.getChannelId());

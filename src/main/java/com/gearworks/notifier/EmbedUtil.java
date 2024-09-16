@@ -11,7 +11,7 @@ import static com.gearworks.notifier.DiscordNotifier.EMBED_FIELDS_ARE_INLINE;
 public class EmbedUtil {
 	public static void addLocation(EmbedBuilder builder, ResourceKey<Level> dimension, BlockPos pos) {
 		String dimensionName;
-		
+
 		if (LevelStem.OVERWORLD.location().equals(dimension.location())) {
 			dimensionName = "the Overworld";
 		} else if (LevelStem.NETHER.location().equals(dimension.location())) {
@@ -21,7 +21,7 @@ public class EmbedUtil {
 		} else {
 			dimensionName = dimension.location().toString();
 		}
-		
+
 		builder.addField("Location", "(" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ") in " + dimensionName, EMBED_FIELDS_ARE_INLINE);
 	}
 }

@@ -50,7 +50,7 @@ public class NotifierConfig {
 	public boolean allowPings() {
 		return Boolean.parseBoolean(this.properties.getProperty(ALLOW_PINGS, "true"));
 	}
-	
+
 	public String getBotToken() {
 		return this.properties.getProperty(BOT_TOKEN);
 	}

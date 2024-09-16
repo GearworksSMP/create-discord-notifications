@@ -22,7 +22,7 @@ public class WarpPlatePairMixin implements WarpPlatePairDuck {
 	public void notifier$setNotifiedOfExpiry(boolean notified) {
 		this.notifier$notifiedOfExpiry = notified;
 	}
-	
+
 	@Inject(method = "setExpiryTime", at = @At("TAIL"), remap = false)
 	private void notifier$onSetExpiryTime(long expiryTime, CallbackInfo ci) {
 		this.notifier$setNotifiedOfExpiry(false);
