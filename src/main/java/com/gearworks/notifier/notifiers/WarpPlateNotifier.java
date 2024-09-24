@@ -70,6 +70,7 @@ public class WarpPlateNotifier implements ServerTickEvents.EndWorldTick {
 
 		@Override
 		public void buildMessage(EmbedBuilder builder) {
+			DiscordNotifier.LOGGER.info("Sending warp plate expiry notification");
 			builder.setTitle("Warp Plate Expiry Notification");
 			builder.addField("Server", NotifierConfig.INSTANCE.getServerName(), EMBED_FIELDS_ARE_INLINE);
 			EmbedUtil.addLocation(builder, dimension, pos);

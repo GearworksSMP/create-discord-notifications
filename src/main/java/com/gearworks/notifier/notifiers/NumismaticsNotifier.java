@@ -1,9 +1,6 @@
 package com.gearworks.notifier.notifiers;
 
-import com.gearworks.notifier.DiscordBot;
-import com.gearworks.notifier.EmbedUtil;
-import com.gearworks.notifier.MessageEvent;
-import com.gearworks.notifier.NotifierConfig;
+import com.gearworks.notifier.*;
 import com.gearworks.notifier.data.NotificationSettings;
 import com.gearworks.notifier.data.NotifierSavedData;
 import com.gearworks.notifier.mixin.numismatics.VendorBlockEntityAccessor;
@@ -64,6 +61,7 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 	}
 
 	public static void sendPurchaseNotification(ServerLevel level, VendorBlockEntity vendor, BlockPos pos, Player purchaser, ItemStack purchasedItem, SliderStylePriceBehaviour price) {
+		DiscordNotifier.LOGGER.info("Sending purchase notification");
 		UUID owner = ((VendorBlockEntityAccessor) vendor).getOwner();
 		if (owner == null) {
 			return;
@@ -84,6 +82,7 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 	}
 
 	public static void sendOutOfStockNotification(ServerLevel level, VendorBlockEntity vendor, BlockPos pos) {
+		DiscordNotifier.LOGGER.info("Sending out of stock notification");
 		UUID owner = ((VendorBlockEntityAccessor) vendor).getOwner();
 		if (owner == null) {
 			return;
