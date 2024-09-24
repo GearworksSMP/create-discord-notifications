@@ -35,14 +35,6 @@ loom {
 			sourceSet sourceSets.client
 		}
 	}
-	
-	runs {
-		client {
-			vmArg("--uuid bc8b5ee7-714a-401c-90d3-ad4e129eb743") // Random UUID, just so that it is stable for testing.
-			vmArg("--username Dev")
-		}
-	}
-
 }
 
 configurations {
