@@ -30,7 +30,7 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"discord-notifier" {
+		"create-discord-notifications" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}

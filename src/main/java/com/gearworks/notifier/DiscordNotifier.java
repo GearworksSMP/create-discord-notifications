@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DiscordNotifier implements ModInitializer {
-	public static final String MOD_ID = "discord-notifier";
+	public static final String MOD_ID = "create-discord-notifications";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final ResourceLocation PACKET_C2S_UPDATE_NOTIFICATION_SETTINGS = new ResourceLocation(MOD_ID, "c2s_update_notification_settings");
 	public static final ResourceLocation PACKET_S2C_NOTIFICATION_SETTINGS = new ResourceLocation(MOD_ID, "s2c_notification_settings");
