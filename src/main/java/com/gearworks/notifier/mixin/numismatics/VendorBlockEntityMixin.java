@@ -60,10 +60,10 @@ public abstract class VendorBlockEntityMixin extends BlockEntity {
 	@Unique
 	private void notifier$sendNotifications(Player purchaser, ItemStack soldItem) {
 		if (purchaser.level() instanceof ServerLevel serverLevel) {
-			NumismaticsNotifier.sendPurchaseNotification(serverLevel, (VendorBlockEntity) (Object) this, this.getBlockPos(), purchaser, soldItem.copy(), this.price);
+			NumismaticsNotifier.INSTANCE.sendPurchaseNotification(serverLevel, (VendorBlockEntity) (Object) this, this.getBlockPos(), purchaser, soldItem.copy(), this.price);
 
 			if (!this.hasStock()) {
-				NumismaticsNotifier.sendOutOfStockNotification(serverLevel, (VendorBlockEntity) (Object) this, this.getBlockPos());
+				NumismaticsNotifier.INSTANCE.sendOutOfStockNotification(serverLevel, (VendorBlockEntity) (Object) this, this.getBlockPos());
 			}
 		}
 	}
