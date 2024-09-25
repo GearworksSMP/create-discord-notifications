@@ -4,9 +4,11 @@ import com.gearworks.notifier.*;
 import com.gearworks.notifier.data.NotificationSettings;
 import com.gearworks.notifier.data.NotifierSavedData;
 import com.gearworks.notifier.mixin.numismatics.VendorBlockEntityAccessor;
+import com.simibubi.create.foundation.utility.Couple;
 import dev.ithundxr.createnumismatics.content.backend.Coin;
 import dev.ithundxr.createnumismatics.content.backend.behaviours.SliderStylePriceBehaviour;
 import dev.ithundxr.createnumismatics.content.vendor.VendorBlockEntity;
+import dev.ithundxr.createnumismatics.util.TextUtils;
 import dev.ithundxr.createnumismatics.util.UsernameUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -29,7 +31,7 @@ import static com.gearworks.notifier.DiscordNotifier.EMBED_FIELDS_ARE_INLINE;
 
 public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, ServerLifecycleEvents.ServerStopping {
 	public static final NumismaticsNotifier INSTANCE = new NumismaticsNotifier();
-	private static final List<Tuple<PurchaseData, Integer>> purchaseQueue = new ArrayList<>();
+	private final List<Tuple<PurchaseData, Integer>> purchaseQueue = new ArrayList<>();
 
 	private NumismaticsNotifier() {
 	}
@@ -60,7 +62,7 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 		}
 	}
 
-	public static void sendPurchaseNotification(ServerLevel level, VendorBlockEntity vendor, BlockPos pos, Player purchaser, ItemStack purchasedItem, SliderStylePriceBehaviour price) {
+	public void sendPurchaseNotification(ServerLevel level, VendorBlockEntity vendor, BlockPos pos, Player purchaser, ItemStack purchasedItem, SliderStylePriceBehaviour price) {
 		DiscordNotifier.LOGGER.info("Sending purchase notification");
 		UUID owner = ((VendorBlockEntityAccessor) vendor).getOwner();
 		if (owner == null) {
@@ -68,7 +70,7 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 		}
 
 		NotificationSettings settings = NotifierSavedData.getSettings(level.getServer(), owner);
-		PurchaseData data = new PurchaseData(level.dimension(), pos, UsernameUtils.INSTANCE.getName(purchaser.getUUID()), UsernameUtils.INSTANCE.getName(owner), settings.discordUsername(), purchasedItem, price.getPrice(Coin.COG));
+		PurchaseData data = new PurchaseData(level.dimension(), pos, UsernameUtils.INSTANCE.getName(purchaser.getUUID()), UsernameUtils.INSTANCE.getName(owner), settings.discordUsername(), purchasedItem, price.getTotalPrice());
 
 		for (Tuple<PurchaseData, Integer> tuple : purchaseQueue) {
 			if (tuple.getA().canMerge(data)) {
@@ -81,7 +83,7 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 		purchaseQueue.add(new Tuple<>(data, 10 * 20));
 	}
 
-	public static void sendOutOfStockNotification(ServerLevel level, VendorBlockEntity vendor, BlockPos pos) {
+	public void sendOutOfStockNotification(ServerLevel level, VendorBlockEntity vendor, BlockPos pos) {
 		DiscordNotifier.LOGGER.info("Sending out of stock notification");
 		UUID owner = ((VendorBlockEntityAccessor) vendor).getOwner();
 		if (owner == null) {
@@ -156,9 +158,16 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 			builder.addField("Server", NotifierConfig.INSTANCE.getServerName(), EMBED_FIELDS_ARE_INLINE);
 			EmbedUtil.addLocation(builder, dimension, pos);
 			builder.addField("Item", sold.getCount() + " " + sold.getHoverName().getString(), EMBED_FIELDS_ARE_INLINE);
-			builder.addField("Cost", cost + " Cogs", EMBED_FIELDS_ARE_INLINE);
+			builder.addField("Cost", formatPrice(cost), EMBED_FIELDS_ARE_INLINE);
 			builder.addField("Buyer", purchaserMcUsername, EMBED_FIELDS_ARE_INLINE);
 			builder.addField("Seller", sellerMcUsername, EMBED_FIELDS_ARE_INLINE);
+		}
+		
+		private static String formatPrice(int cost) {
+			Couple<Integer> cogsAndSpurs = Coin.COG.convert(cost);
+			int cogs = cogsAndSpurs.getFirst();
+			int spurs = cogsAndSpurs.getSecond();
+			return TextUtils.formatInt(cogs) + " " + Coin.COG.getName(cogs) + ", " + spurs + "¤";
 		}
 
 		@Override
