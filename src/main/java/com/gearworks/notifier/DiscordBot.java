@@ -19,6 +19,7 @@ public class DiscordBot implements Runnable {
 	private boolean started = false;
 	private int retryCount = 0;
 	private JDA api;
+	private boolean shouldRun = true;
 
 	private DiscordBot() {
 		this.messageEventQueue = new ConcurrentLinkedQueue<>();
@@ -57,6 +58,11 @@ public class DiscordBot implements Runnable {
 			}
 		}
 	}
+	
+	public void stop() {
+		DiscordNotifier.LOGGER.info("Stopping bot thread");
+		this.shouldRun = false;
+	}
 
 	public Optional<String> getId(String username) {
 		return this.api.getUsersByName(username, false).stream().findFirst().map(ISnowflake::getId);
@@ -67,7 +73,7 @@ public class DiscordBot implements Runnable {
 	}
 
 	private void pollEvents() {
-		while (this.started) {
+		while (this.started && this.shouldRun) {
 			MessageEvent messageEvent = this.messageEventQueue.poll();
 
 			if (messageEvent != null) {

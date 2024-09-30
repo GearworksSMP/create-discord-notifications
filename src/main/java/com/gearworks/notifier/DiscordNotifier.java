@@ -34,6 +34,10 @@ public class DiscordNotifier implements ModInitializer {
 			NotificationSettings settings = NotifierSavedData.getSettings(handler.getPlayer());
 			sender.sendPacket(PACKET_S2C_NOTIFICATION_SETTINGS, settings.toBuf());
 		});
+		
+		ServerLifecycleEvents.SERVER_STOPPED.register((server) -> {
+			DiscordBot.INSTANCE.stop();
+		});
 
 		if (FabricLoader.getInstance().isModLoaded("rentaplate")) {
 			ServerTickEvents.END_WORLD_TICK.register(WarpPlateNotifier.INSTANCE);
