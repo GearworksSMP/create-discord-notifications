@@ -19,7 +19,7 @@ public class DiscordBot implements Runnable {
 	private boolean started = false;
 	private int retryCount = 0;
 	private JDA api;
-	private boolean shouldRun = true;
+	private volatile boolean shouldRun = true;
 
 	private DiscordBot() {
 		this.messageEventQueue = new ConcurrentLinkedQueue<>();
