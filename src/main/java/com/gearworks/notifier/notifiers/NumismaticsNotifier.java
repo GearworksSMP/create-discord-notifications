@@ -70,7 +70,7 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 		}
 
 		NotificationSettings settings = NotifierSavedData.getSettings(level.getServer(), owner);
-		PurchaseData data = new PurchaseData(level.dimension(), pos, UsernameUtils.INSTANCE.getName(purchaser.getUUID()), UsernameUtils.INSTANCE.getName(owner), settings.discordUsername(), purchasedItem, price.getTotalPrice());
+		PurchaseData data = new PurchaseData(level.dimension(), pos, getUsername(purchaser.getUUID()), getUsername(owner), settings.discordUsername(), purchasedItem, price.getTotalPrice());
 
 		for (Tuple<PurchaseData, Integer> tuple : purchaseQueue) {
 			if (tuple.getA().canMerge(data)) {
@@ -81,6 +81,17 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 		}
 
 		purchaseQueue.add(new Tuple<>(data, 10 * 20));
+	}
+
+	public String getUsername(UUID uuid) {
+		String name = UsernameUtils.INSTANCE.getName(uuid);
+		try{
+			uuid = UUID.fromString(name);
+			name = UsernameUtils.INSTANCE.getName(uuid);
+		} catch (IllegalArgumentException exception){
+			return name;
+		}
+		return name;
 	}
 
 	public void sendOutOfStockNotification(ServerLevel level, VendorBlockEntity vendor, BlockPos pos) {
@@ -100,7 +111,7 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 			return;
 		}
 
-		DiscordBot.INSTANCE.addMessage(new OutOfStockMessageEvent(level.dimension(), pos, vendor.getSellingItem(), UsernameUtils.INSTANCE.getName(owner), discordId));
+		DiscordBot.INSTANCE.addMessage(new OutOfStockMessageEvent(level.dimension(), pos, vendor.getSellingItem(), getUsername(owner), discordId));
 	}
 
 	private static class PurchaseData {
