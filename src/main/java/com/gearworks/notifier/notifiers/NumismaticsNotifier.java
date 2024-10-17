@@ -87,11 +87,12 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 		String name = UsernameUtils.INSTANCE.getName(uuid);
 		try{
 			uuid = UUID.fromString(name);
+			Thread.sleep(100);
 			name = UsernameUtils.INSTANCE.getName(uuid);
-		} catch (IllegalArgumentException exception){
+		} catch (IllegalArgumentException | InterruptedException exception){
 			return name;
 		}
-		return name;
+        return name;
 	}
 
 	public void sendOutOfStockNotification(ServerLevel level, VendorBlockEntity vendor, BlockPos pos) {
