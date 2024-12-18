@@ -4,6 +4,7 @@ import com.gearworks.notifier.*;
 import com.gearworks.notifier.data.NotificationSettings;
 import com.gearworks.notifier.data.NotifierSavedData;
 import com.gearworks.notifier.mixin.numismatics.VendorBlockEntityAccessor;
+import com.mojang.authlib.GameProfile;
 import com.simibubi.create.foundation.utility.Couple;
 import dev.ithundxr.createnumismatics.content.backend.Coin;
 import dev.ithundxr.createnumismatics.content.backend.behaviours.SliderStylePriceBehaviour;
@@ -70,7 +71,7 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 		}
 
 		NotificationSettings settings = NotifierSavedData.getSettings(level.getServer(), owner);
-		PurchaseData data = new PurchaseData(level.dimension(), pos, getUsername(purchaser.getUUID()), getUsername(owner), settings.discordUsername(), purchasedItem, price.getTotalPrice());
+		PurchaseData data = new PurchaseData(level.dimension(), pos, getUsername(level.getServer(), purchaser.getUUID()), getUsername(level.getServer(), owner), settings.discordUsername(), purchasedItem, price.getTotalPrice());
 
 		for (Tuple<PurchaseData, Integer> tuple : purchaseQueue) {
 			if (tuple.getA().canMerge(data)) {
@@ -83,9 +84,14 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 		purchaseQueue.add(new Tuple<>(data, 10 * 20));
 	}
 
-	public String getUsername(UUID uuid) {
-		String name = UsernameUtils.INSTANCE.getName(uuid);
+	public String getUsername(MinecraftServer server, UUID uuid) {
+		String name = getOfflinePlayerNameFromUUID(server, uuid);
+		if (name != null) {
+			return name;
+		}
+		name = UsernameUtils.INSTANCE.getName(uuid);
 		try{
+			// UUID.fromString() fails here if we already have the name
 			uuid = UUID.fromString(name);
 			Thread.sleep(100);
 			name = UsernameUtils.INSTANCE.getName(uuid);
@@ -112,7 +118,7 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 			return;
 		}
 
-		DiscordBot.INSTANCE.addMessage(new OutOfStockMessageEvent(level.dimension(), pos, vendor.getSellingItem(), getUsername(owner), discordId));
+		DiscordBot.INSTANCE.addMessage(new OutOfStockMessageEvent(level.dimension(), pos, vendor.getSellingItem(), getUsername(level.getServer(), owner), discordId));
 	}
 
 	private static class PurchaseData {
@@ -209,4 +215,12 @@ public class NumismaticsNotifier implements ServerTickEvents.EndWorldTick, Serve
 			return NotifierConfig.INSTANCE.getNotificationChannel();
 		}
 	}
+
+	public static String getOfflinePlayerNameFromUUID(MinecraftServer server, UUID playerUUID) {
+		// Attempt to get the GameProfile from the user cache.
+		Optional<GameProfile> profileOpt = server.getProfileCache().get(playerUUID);
+
+		// If present, extract the stored player name.
+        return profileOpt.map(GameProfile::getName).orElse(null);
+    }
 }
